@@ -285,7 +285,8 @@ namespace Stillwater.Tools
 
                 var settings = new TextureImporterSettings();
                 importer.ReadTextureSettings(settings);
-                settings.spritePivot = new Vector2(0.5f, 0f);
+                // Pivot at center of diamond: x=0.5 (center), y=0.25 (8 pixels up in 32px sprite)
+                settings.spritePivot = new Vector2(0.5f, 0.25f);
                 settings.spriteAlignment = (int)SpriteAlignment.Custom;
                 importer.SetTextureSettings(settings);
 
