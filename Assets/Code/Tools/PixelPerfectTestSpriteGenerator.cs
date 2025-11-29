@@ -6,8 +6,8 @@ namespace Stillwater.Tools
 {
     public static class PixelPerfectTestSpriteGenerator
     {
-        private const int SpriteSize = 16;
-        private const int PixelsPerUnit = 16;
+        private const int SpriteSize = 32;
+        private const int PixelsPerUnit = 32;
 
         [MenuItem("Stillwater/Camera/Generate Test Sprite")]
         public static void GenerateTestSprite()
@@ -61,7 +61,7 @@ namespace Stillwater.Tools
                 Directory.CreateDirectory(directoryPath);
             }
 
-            string path = $"{directoryPath}/TestSprite_16x16.png";
+            string path = $"{directoryPath}/TestSprite_32x32.png";
             byte[] pngData = texture.EncodeToPNG();
             File.WriteAllBytes(path, pngData);
 
@@ -89,7 +89,7 @@ namespace Stillwater.Tools
         [MenuItem("Stillwater/Camera/Create Test Sprite Object")]
         public static void CreateTestSpriteObject()
         {
-            string spritePath = "Assets/Art/Sprites/Test/TestSprite_16x16.png";
+            string spritePath = "Assets/Art/Sprites/Test/TestSprite_32x32.png";
             var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(spritePath);
 
             if (sprite == null)
