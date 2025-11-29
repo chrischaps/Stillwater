@@ -11,8 +11,7 @@
         "Stillwater.NPC",
         "Stillwater.Journal",
         "Stillwater.UI",
-        "Unity.2D.PixelPerfect",
-        "Unity.RenderPipelines.Universal.Runtime"
+        "Unity.2D.PixelPerfect"
     ],
     "includePlatforms": [
         "Editor"

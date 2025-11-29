@@ -1,6 +1,6 @@
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
+using UnityEngine.U2D;
 
 namespace Stillwater.Tools
 {

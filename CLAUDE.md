@@ -145,6 +145,22 @@ This project uses JIRA for task management and follows a structured git workflow
 
 4. **Test the Implementation**
     - **CRITICAL:** Always test before committing or creating PRs
+
+    - **Run Unity Batch Mode Compile Check:**
+        - **IMPORTANT:** Before committing, verify code compiles without errors
+        - If Unity Editor is closed, run batch mode compile check:
+        ```bash
+        # Windows - Run Unity in batch mode to check for compile errors
+        "C:/Program Files/Unity/Hub/Editor/6000.2.14f1/Editor/Unity.exe" -batchmode -quit -projectPath "C:/Users/chris/dev/Stillwater" -logFile - 2>&1 | grep -E "(error CS|Error|Compilation failed)"
+        ```
+        - If Unity Editor is open, check the Editor log for errors:
+        ```bash
+        # Check Unity Editor log for compile errors (when Editor is running)
+        grep -E "error CS|Assets.*\.cs.*error|Compilation failed" "$LOCALAPPDATA/Unity/Editor/Editor.log"
+        ```
+        - **If compile errors are found, fix them before proceeding**
+        - Common causes: missing using directives, incorrect namespaces, missing assembly references
+
     - **Write unit tests** for new functionality when possible:
         - Create test classes in the appropriate `Tests/` assembly
         - Cover core logic, edge cases, and error conditions
@@ -161,12 +177,14 @@ This project uses JIRA for task management and follows a structured git workflow
     - **Only proceed to PR if all tests pass and manual testing confirms changes work correctly**
    ```
    # Testing workflow:
-   # 1. Write unit tests for new functionality (when applicable)
-   # 2. Open Window > General > Test Runner
-   # 3. Run All Tests - ALL must pass (new and existing)
-   # 4. Check Console for compiler errors (must be zero)
-   # 5. Enter Play Mode and manually verify the feature
-   # 6. Document test coverage in PR description
+   # 1. Run Unity batch mode compile check (or check Editor.log if Unity is open)
+   # 2. Fix any compile errors before proceeding
+   # 3. Write unit tests for new functionality (when applicable)
+   # 4. Open Window > General > Test Runner
+   # 5. Run All Tests - ALL must pass (new and existing)
+   # 6. Check Console for compiler errors (must be zero)
+   # 7. Enter Play Mode and manually verify the feature
+   # 8. Document test coverage in PR description
    ```
 
 5. **Open Pull Request**
@@ -255,6 +273,8 @@ git add .
 git commit -m "STIL-10: Verify URP 2D Renderer is active"
 
 # 5. Test the implementation
+# - Run Unity batch mode compile check (or check Editor.log if Unity is open)
+# - Fix any compile errors before proceeding
 # - Write unit tests for new functionality
 # - Run Unity Test Runner - ALL tests must pass
 # - Check Console for compiler errors (must be zero)
@@ -295,6 +315,7 @@ git checkout -b feature/STIL-24-fishing-state-enum
 # 5. Implement, commit, and test (same as regular workflow)
 git add .
 git commit -m "STIL-24: Define FishingState enum and interfaces"
+# Run Unity batch mode compile check - fix any errors before proceeding
 # Write unit tests and run Unity Test Runner - ALL tests must pass
 
 # 6. Open pull request to EPIC BRANCH (not main)
