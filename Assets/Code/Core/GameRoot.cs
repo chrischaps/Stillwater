@@ -97,10 +97,12 @@ namespace Stillwater.Core
         {
             // EventBus is static, no registration needed
 
-            // Future services will be registered here:
-            // ServiceLocator.Register<ILakeWatcher>(new LakeWatcher());
-            // ServiceLocator.Register<IEchoClient>(new EchoClient());
-            // ServiceLocator.Register<ISaveSystem>(new SaveSystem());
+            // Auto-discover and register all services marked with [ServiceDefault]
+            int count = ServiceLocator.RegisterAllDefaults();
+            Log($"Auto-registered {count} service(s).");
+
+            // Manual registrations can still be added here if needed:
+            // ServiceLocator.Register<ISpecialService>(new SpecialService(customConfig));
 
             Log("Core services registered.");
         }

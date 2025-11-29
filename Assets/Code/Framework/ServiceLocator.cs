@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace Stillwater.Framework
 {
@@ -163,6 +165,178 @@ namespace Stillwater.Framework
                 {
                     return _services.Count;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Register a service instance for a specific interface type (non-generic version).
+        /// </summary>
+        /// <param name="serviceType">The service interface type.</param>
+        /// <param name="instance">The service instance.</param>
+        /// <exception cref="ArgumentNullException">Thrown if serviceType or instance is null.</exception>
+        /// <exception cref="ArgumentException">Thrown if instance does not implement serviceType.</exception>
+        /// <exception cref="InvalidOperationException">Thrown if a service of this type is already registered.</exception>
+        public static void Register(Type serviceType, object instance)
+        {
+            if (serviceType == null)
+                throw new ArgumentNullException(nameof(serviceType));
+            if (instance == null)
+                throw new ArgumentNullException(nameof(instance), $"Cannot register null service for type {serviceType.Name}");
+            if (!serviceType.IsInstanceOfType(instance))
+                throw new ArgumentException($"Instance of type {instance.GetType().Name} does not implement {serviceType.Name}", nameof(instance));
+
+            lock (_lock)
+            {
+                if (_services.ContainsKey(serviceType))
+                {
+                    throw new InvalidOperationException($"Service of type {serviceType.Name} is already registered.");
+                }
+
+                _services[serviceType] = instance;
+            }
+        }
+
+        /// <summary>
+        /// Automatically discover and register all services marked with [ServiceDefault] attribute.
+        /// Scans all loaded assemblies for classes with the attribute and registers them.
+        ///
+        /// Registration modes:
+        /// - Implicit: [ServiceDefault] registers for ALL [Service] interfaces the class implements
+        /// - Explicit: [ServiceDefault(typeof(IFoo))] registers only for the specified interface
+        /// </summary>
+        /// <param name="assemblies">Optional specific assemblies to scan. If null, scans all loaded assemblies.</param>
+        /// <returns>The number of services registered.</returns>
+        public static int RegisterAllDefaults(params Assembly[] assemblies)
+        {
+            var assembliesToScan = assemblies.Length > 0
+                ? assemblies
+                : AppDomain.CurrentDomain.GetAssemblies();
+
+            int registeredCount = 0;
+
+            foreach (var assembly in assembliesToScan)
+            {
+                // Skip system assemblies for performance
+                if (assembly.FullName.StartsWith("System") ||
+                    assembly.FullName.StartsWith("Microsoft") ||
+                    assembly.FullName.StartsWith("mscorlib") ||
+                    assembly.FullName.StartsWith("Unity"))
+                {
+                    continue;
+                }
+
+                try
+                {
+                    registeredCount += RegisterDefaultsFromAssembly(assembly);
+                }
+                catch (ReflectionTypeLoadException)
+                {
+                    // Skip assemblies that can't be loaded
+                }
+            }
+
+            return registeredCount;
+        }
+
+        /// <summary>
+        /// Register all [ServiceDefault] types from a specific assembly.
+        /// </summary>
+        private static int RegisterDefaultsFromAssembly(Assembly assembly)
+        {
+            int registeredCount = 0;
+
+            foreach (var type in assembly.GetTypes())
+            {
+                if (!type.IsClass || type.IsAbstract)
+                    continue;
+
+                var defaultAttributes = type.GetCustomAttributes<ServiceDefaultAttribute>().ToList();
+                if (defaultAttributes.Count == 0)
+                    continue;
+
+                // Check for explicit type specifications
+                var explicitTypes = defaultAttributes
+                    .Where(attr => attr.ServiceType != null)
+                    .Select(attr => attr.ServiceType)
+                    .ToList();
+
+                List<Type> serviceTypes;
+
+                if (explicitTypes.Count > 0)
+                {
+                    // Explicit mode: use only the specified types
+                    serviceTypes = explicitTypes;
+                }
+                else
+                {
+                    // Implicit mode: find all [Service] interfaces this class implements
+                    serviceTypes = type.GetInterfaces()
+                        .Where(i => i.GetCustomAttribute<ServiceAttribute>() != null)
+                        .ToList();
+                }
+
+                if (serviceTypes.Count == 0)
+                    continue;
+
+                // Create instance using parameterless constructor
+                var constructor = type.GetConstructor(Type.EmptyTypes);
+                if (constructor == null)
+                {
+                    UnityEngine.Debug.LogWarning(
+                        $"[ServiceLocator] Cannot register {type.Name}: no parameterless constructor found.");
+                    continue;
+                }
+
+                object instance = null;
+
+                foreach (var serviceType in serviceTypes)
+                {
+                    // Validate that the class actually implements the interface
+                    if (!serviceType.IsAssignableFrom(type))
+                    {
+                        UnityEngine.Debug.LogWarning(
+                            $"[ServiceLocator] Cannot register {type.Name} as {serviceType.Name}: " +
+                            $"class does not implement the interface.");
+                        continue;
+                    }
+
+                    // Validate that the interface has [Service] attribute
+                    if (serviceType.GetCustomAttribute<ServiceAttribute>() == null)
+                    {
+                        UnityEngine.Debug.LogWarning(
+                            $"[ServiceLocator] Cannot register {type.Name} as {serviceType.Name}: " +
+                            $"interface does not have [Service] attribute.");
+                        continue;
+                    }
+
+                    // Skip if already registered
+                    if (IsRegistered(serviceType))
+                    {
+                        UnityEngine.Debug.LogWarning(
+                            $"[ServiceLocator] Skipping {type.Name} as {serviceType.Name}: " +
+                            $"service already registered.");
+                        continue;
+                    }
+
+                    // Lazily create instance (only once, shared across all interface registrations)
+                    instance ??= constructor.Invoke(null);
+
+                    Register(serviceType, instance);
+                    registeredCount++;
+                }
+            }
+
+            return registeredCount;
+        }
+
+        /// <summary>
+        /// Check if a service is registered (non-generic version).
+        /// </summary>
+        private static bool IsRegistered(Type serviceType)
+        {
+            lock (_lock)
+            {
+                return _services.ContainsKey(serviceType);
             }
         }
     }
