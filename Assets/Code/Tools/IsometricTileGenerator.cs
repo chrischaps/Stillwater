@@ -9,6 +9,7 @@ namespace Stillwater.Tools
     {
         private const int TileWidth = 32;
         private const int TileHeight = 32;
+        private const int DiamondHeight = 16; // Cell height is 0.5, so diamond is half the sprite height
         private const int PixelsPerUnit = 32;
 
         private const string SpritePath = "Assets/Art/Tiles/Placeholder";
@@ -107,11 +108,12 @@ namespace Stillwater.Tools
             int centerX = TileWidth / 2;
             int baseY = 0;
             int halfWidth = TileWidth / 2;
-            int height = TileHeight / 2;
+            int halfHeight = DiamondHeight / 2; // 8 pixels for each half
 
-            for (int y = 0; y < height; y++)
+            // Draw bottom half of diamond (expanding from point to widest)
+            for (int y = 0; y < halfHeight; y++)
             {
-                int rowWidth = (y * halfWidth) / height;
+                int rowWidth = ((y + 1) * halfWidth) / halfHeight;
                 int startX = centerX - rowWidth;
                 int endX = centerX + rowWidth;
 
@@ -127,9 +129,10 @@ namespace Stillwater.Tools
                 }
             }
 
-            for (int y = 0; y < height; y++)
+            // Draw top half of diamond (contracting from widest to point)
+            for (int y = 0; y < halfHeight; y++)
             {
-                int rowWidth = ((height - 1 - y) * halfWidth) / height;
+                int rowWidth = ((halfHeight - y) * halfWidth) / halfHeight;
                 int startX = centerX - rowWidth;
                 int endX = centerX + rowWidth;
 
@@ -140,7 +143,7 @@ namespace Stillwater.Tools
                         Color pixelColor = fill;
                         if (x == startX) pixelColor = dark;
                         else if (x == endX) pixelColor = light;
-                        texture.SetPixel(x, baseY + height + y, pixelColor);
+                        texture.SetPixel(x, baseY + halfHeight + y, pixelColor);
                     }
                 }
             }
@@ -148,19 +151,21 @@ namespace Stillwater.Tools
 
         private static void AddGroundDetails(Texture2D texture, Color dark, Color light)
         {
-            texture.SetPixel(10, 6, dark);
-            texture.SetPixel(20, 10, dark);
-            texture.SetPixel(14, 12, light);
+            // Adjusted for 16-pixel tall diamond
+            texture.SetPixel(10, 4, dark);
+            texture.SetPixel(20, 6, dark);
+            texture.SetPixel(14, 10, light);
             texture.SetPixel(18, 8, light);
-            texture.SetPixel(12, 4, dark);
+            texture.SetPixel(12, 3, dark);
         }
 
         private static void AddWavePattern(Texture2D texture, Color waveColor)
         {
+            // Adjusted for 16-pixel tall diamond
             for (int i = 0; i < 3; i++)
             {
                 int baseX = 10 + i * 4;
-                int baseY = 6 + i * 2;
+                int baseY = 4 + i * 2;
                 if (IsInsideDiamond(baseX, baseY))
                 {
                     texture.SetPixel(baseX, baseY, waveColor);
@@ -172,10 +177,11 @@ namespace Stillwater.Tools
 
         private static void DrawRock(Texture2D texture, Color fill, Color dark, Color light)
         {
+            // Rock sitting on isometric ground - fits within 16-pixel height
             int centerX = TileWidth / 2;
-            int baseY = 2;
-            int rockWidth = 12;
-            int rockHeight = 10;
+            int baseY = 1;
+            int rockWidth = 10;
+            int rockHeight = 8;
 
             for (int y = 0; y < rockHeight; y++)
             {
@@ -202,9 +208,10 @@ namespace Stillwater.Tools
 
         private static void DrawFishingSpotMarker(Texture2D texture, Color fill, Color dark, Color light)
         {
+            // Fishing spot indicator - fits within 16-pixel height
             int centerX = TileWidth / 2;
-            int centerY = TileHeight / 2 - 2;
-            int radius = 5;
+            int centerY = DiamondHeight / 2; // Center at y=8
+            int radius = 4;
 
             for (int y = -radius; y <= radius; y++)
             {
@@ -216,12 +223,12 @@ namespace Stillwater.Tools
                         int px = centerX + x;
                         int py = centerY + y;
 
-                        if (dist > radius - 2)
+                        if (dist > radius - 1.5f)
                         {
                             Color edgeColor = (x + y < 0) ? light : dark;
                             texture.SetPixel(px, py, edgeColor);
                         }
-                        else if (dist <= 2)
+                        else if (dist <= 1.5f)
                         {
                             texture.SetPixel(px, py, light);
                         }
@@ -232,18 +239,14 @@ namespace Stillwater.Tools
                     }
                 }
             }
-
-            texture.SetPixel(centerX, centerY + radius + 2, fill);
-            texture.SetPixel(centerX, centerY + radius + 3, fill);
-            texture.SetPixel(centerX, centerY - radius - 1, fill);
         }
 
         private static bool IsInsideDiamond(int x, int y)
         {
             int centerX = TileWidth / 2;
-            int centerY = TileHeight / 2;
+            int centerY = DiamondHeight / 2; // Diamond is in bottom 16 pixels
             int halfWidth = TileWidth / 2;
-            int halfHeight = TileHeight / 2;
+            int halfHeight = DiamondHeight / 2;
 
             float dx = Mathf.Abs(x - centerX) / (float)halfWidth;
             float dy = Mathf.Abs(y - centerY) / (float)halfHeight;
