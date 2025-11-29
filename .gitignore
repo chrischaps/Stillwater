@@ -89,3 +89,6 @@ Thumbs.db
 # Claude
 .claude/
 nul
+
+# Test results
+TestResults.xml
