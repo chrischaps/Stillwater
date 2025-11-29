@@ -1,0 +1,17 @@
+{
+    "name": "Stillwater.NPC",
+    "rootNamespace": "Stillwater.NPC",
+    "references": [
+        "Stillwater.Core",
+        "Stillwater.Framework"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

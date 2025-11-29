@@ -1,0 +1,17 @@
+{
+    "name": "Stillwater.Journal",
+    "rootNamespace": "Stillwater.Journal",
+    "references": [
+        "Stillwater.Core",
+        "Stillwater.Framework"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
