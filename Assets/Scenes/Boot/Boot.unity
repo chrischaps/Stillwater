@@ -149,8 +149,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Stillwater.Core::Stillwater.Core.GameRoot
   _titleSceneName: Title
-  _mainSceneName: Main
-  _skipToMain: 1
+  _mainSceneNames:
+  - Main Base
+  - Main_Systems
+  - Main_UI
+  _skipToMain: 0
   _logInitialization: 1
 --- !u!4 &264633842
 Transform:
