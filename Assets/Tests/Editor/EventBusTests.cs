@@ -255,5 +255,28 @@ namespace Stillwater.Tests
             Assert.IsNotNull(moodEvent);
             Assert.AreEqual(0.8f, moodEvent.Value.Stillness, 0.001f);
         }
+
+        [Test]
+        public void SceneEvents_CanBeUsed()
+        {
+            // Test scene lifecycle events
+            GameInitializedEvent? initEvent = null;
+            SceneLoadStartedEvent? startedEvent = null;
+            SceneLoadCompletedEvent? completedEvent = null;
+
+            EventBus.Subscribe<GameInitializedEvent>(e => initEvent = e);
+            EventBus.Subscribe<SceneLoadStartedEvent>(e => startedEvent = e);
+            EventBus.Subscribe<SceneLoadCompletedEvent>(e => completedEvent = e);
+
+            EventBus.Publish(new GameInitializedEvent());
+            EventBus.Publish(new SceneLoadStartedEvent { SceneName = "TestScene" });
+            EventBus.Publish(new SceneLoadCompletedEvent { SceneName = "TestScene" });
+
+            Assert.IsNotNull(initEvent);
+            Assert.IsNotNull(startedEvent);
+            Assert.AreEqual("TestScene", startedEvent.Value.SceneName);
+            Assert.IsNotNull(completedEvent);
+            Assert.AreEqual("TestScene", completedEvent.Value.SceneName);
+        }
     }
 }

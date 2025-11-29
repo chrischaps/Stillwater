@@ -1,7 +1,9 @@
 {
     "name": "Stillwater.Core",
     "rootNamespace": "Stillwater.Core",
-    "references": [],
+    "references": [
+        "Stillwater.Framework"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
