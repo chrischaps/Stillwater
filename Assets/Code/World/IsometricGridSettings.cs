@@ -12,9 +12,9 @@ namespace Stillwater.World
     ///   Sprites closer to the camera (higher Y in world space) render on top.
     ///
     /// - **Cell Size:** (1, 0.5, 1)
-    ///   Standard 2:1 isometric ratio. With 16 PPU:
-    ///   - 1 unit = 16 pixels horizontally
-    ///   - 0.5 units = 8 pixels vertically (half-height for isometric diamond)
+    ///   Standard 2:1 isometric ratio. With 32 PPU:
+    ///   - 1 unit = 32 pixels horizontally
+    ///   - 0.5 units = 16 pixels vertically (half-height for isometric diamond)
     ///
     /// - **Cell Gap:** (0, 0, 0)
     ///   No gap between tiles for seamless tiling.
@@ -25,8 +25,9 @@ namespace Stillwater.World
     /// ## Tile Art Guidelines
     ///
     /// When creating isometric tiles for this grid:
-    /// - Base tile footprint: 16x8 pixels (1x0.5 units)
-    /// - Tile sprites should be set to 16 PPU
+    /// - Base sprite size: 32x32 pixels (1x1 units)
+    /// - Isometric tile footprint: 32x16 pixels (1x0.5 units)
+    /// - Tile sprites should be set to 32 PPU
     /// - Pivot point at bottom-center for proper positioning
     /// - Use Transparency Sort Mode: Custom Axis (0, 1, 0) for depth sorting
     ///
@@ -52,9 +53,10 @@ namespace Stillwater.World
     {
         public const float CellWidth = 1f;
         public const float CellHeight = 0.5f;
-        public const int PixelsPerUnit = 16;
+        public const int PixelsPerUnit = 32;
 
-        public const int TilePixelWidth = 16;
-        public const int TilePixelHeight = 8;
+        public const int BaseSpriteSize = 32;
+        public const int TilePixelWidth = 32;
+        public const int TilePixelHeight = 16;
     }
 }
