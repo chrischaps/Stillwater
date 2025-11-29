@@ -43,7 +43,14 @@ namespace Stillwater.Core
 
         [Header("Scene Names")]
         [SerializeField] private string _titleSceneName = "Title";
-        [SerializeField] private string _mainSceneName = "Main";
+
+        [Tooltip("Main game scenes to load additively. Order matters - base scene should be first.")]
+        [SerializeField] private string[] _mainSceneNames = new[]
+        {
+            "Main Base",
+            "Main_Systems",
+            "Main_UI"
+        };
 
         [Header("Debug")]
         [SerializeField] private bool _skipToMain;
@@ -85,7 +92,7 @@ namespace Stillwater.Core
             // Start the game flow
             if (_skipToMain)
             {
-                LoadScene(_mainSceneName);
+                StartGame();
             }
             else
             {
@@ -193,11 +200,56 @@ namespace Stillwater.Core
         }
 
         /// <summary>
-        /// Transition to the main game scene.
+        /// Transition to the main game. Loads all main scenes additively.
         /// </summary>
         public void StartGame()
         {
-            LoadScene(_mainSceneName);
+            if (_mainSceneNames == null || _mainSceneNames.Length == 0)
+            {
+                Debug.LogWarning("[GameRoot] No main scenes configured.");
+                return;
+            }
+
+            Log($"Starting game with {_mainSceneNames.Length} scene(s)...");
+            StartCoroutine(LoadMainScenesAsync());
+        }
+
+        private IEnumerator LoadMainScenesAsync()
+        {
+            // First, load the base scene (replaces current scene)
+            if (_mainSceneNames.Length > 0)
+            {
+                yield return LoadSceneAsyncInternal(_mainSceneNames[0], LoadSceneMode.Single);
+            }
+
+            // Then load remaining scenes additively
+            for (int i = 1; i < _mainSceneNames.Length; i++)
+            {
+                yield return LoadSceneAsyncInternal(_mainSceneNames[i], LoadSceneMode.Additive);
+            }
+
+            Log("All main scenes loaded.");
+            EventBus.Publish(new GameStartedEvent());
+        }
+
+        private IEnumerator LoadSceneAsyncInternal(string sceneName, LoadSceneMode mode)
+        {
+            EventBus.Publish(new SceneLoadStartedEvent { SceneName = sceneName });
+
+            var operation = SceneManager.LoadSceneAsync(sceneName, mode);
+            if (operation == null)
+            {
+                Debug.LogError($"[GameRoot] Failed to start loading scene: {sceneName}");
+                yield break;
+            }
+
+            while (!operation.isDone)
+            {
+                yield return null;
+            }
+
+            Log($"Scene loaded: {sceneName}");
+            EventBus.Publish(new SceneLoadCompletedEvent { SceneName = sceneName });
         }
 
         /// <summary>

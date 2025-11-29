@@ -85,4 +85,9 @@ namespace Stillwater.Core
         /// <summary>The name of the scene that was loaded.</summary>
         public string SceneName;
     }
+
+    /// <summary>
+    /// Fired when the main game has started and all main scenes are loaded.
+    /// </summary>
+    public struct GameStartedEvent { }
 }
