@@ -1,0 +1,65 @@
+namespace Stillwater.Core
+{
+    /// <summary>
+    /// Fired when the fishing state machine transitions to a new state.
+    /// </summary>
+    public struct FishingStateChangedEvent
+    {
+        /// <summary>The previous fishing state.</summary>
+        public string PreviousState;
+
+        /// <summary>The new fishing state.</summary>
+        public string NewState;
+    }
+
+    /// <summary>
+    /// Fired when a fish is successfully caught.
+    /// </summary>
+    public struct FishCaughtEvent
+    {
+        /// <summary>Identifier for the type of fish caught.</summary>
+        public string FishId;
+
+        /// <summary>The zone where the fish was caught.</summary>
+        public string ZoneId;
+
+        /// <summary>Size or weight of the caught fish.</summary>
+        public float Size;
+
+        /// <summary>Whether this was a rare catch.</summary>
+        public bool IsRare;
+    }
+
+    /// <summary>
+    /// Fired when a hooked fish escapes.
+    /// </summary>
+    public struct FishLostEvent
+    {
+        /// <summary>Identifier for the type of fish that escaped (if known).</summary>
+        public string FishId;
+
+        /// <summary>The zone where the fish was lost.</summary>
+        public string ZoneId;
+
+        /// <summary>Reason the fish escaped (e.g., "line_break", "timeout", "missed_input").</summary>
+        public string Reason;
+    }
+
+    /// <summary>
+    /// Fired when the Lake Watcher updates mood scores.
+    /// </summary>
+    public struct MoodUpdatedEvent
+    {
+        /// <summary>Current stillness mood score (0-1).</summary>
+        public float Stillness;
+
+        /// <summary>Current curiosity mood score (0-1).</summary>
+        public float Curiosity;
+
+        /// <summary>Current loss mood score (0-1).</summary>
+        public float Loss;
+
+        /// <summary>Current disruption mood score (0-1).</summary>
+        public float Disruption;
+    }
+}
