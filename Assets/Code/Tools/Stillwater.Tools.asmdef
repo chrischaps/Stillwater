@@ -1,0 +1,26 @@
+{
+    "name": "Stillwater.Tools",
+    "rootNamespace": "Stillwater.Tools",
+    "references": [
+        "Stillwater.Core",
+        "Stillwater.Framework",
+        "Stillwater.Fishing",
+        "Stillwater.World",
+        "Stillwater.Echo",
+        "Stillwater.Anomalies",
+        "Stillwater.NPC",
+        "Stillwater.Journal",
+        "Stillwater.UI"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
