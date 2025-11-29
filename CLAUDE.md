@@ -174,10 +174,16 @@ This project uses JIRA for task management and follows a structured git workflow
         - **If any tests fail, fix them before proceeding**
         - Test results are written to `TestResults.xml` in the project root
 
-    - **Write unit tests** for new functionality when possible:
+    - **Write unit tests** for new functionality:
+        - **REQUIRED:** Every ticket must either (a) include new tests, or (b) include a justification in the PR description explaining why tests are not suitable
         - Create test classes in the appropriate `Tests/` assembly
         - Cover core logic, edge cases, and error conditions
         - Aim for tests that validate acceptance criteria
+        - Valid reasons tests may not be suitable:
+            - Pure Unity Editor/scene setup (no testable code)
+            - Asset-only changes (sprites, prefabs, ScriptableObjects)
+            - Configuration changes (project settings, build settings)
+        - If adding tests, run them before creating the PR to ensure they pass
     - **Run the Unity Test Runner** (Window > General > Test Runner):
         - Execute all tests in Edit Mode and Play Mode
         - **All new and existing tests must pass** before proceeding
@@ -209,6 +215,7 @@ This project uses JIRA for task management and follows a structured git workflow
     - PR description should include:
         - Link to the JIRA ticket (e.g., `https://chrischappelear.atlassian.net/browse/STIL-10`)
         - Summary of changes
+        - **Test coverage:** Either (a) list new tests added, or (b) explain why tests are not suitable for this ticket
         - **Manual testing performed** (Phase 1: document all test steps and results)
         - Any notes or considerations
     - **IMPORTANT:** Do NOT merge the PR - wait for code review and approval
