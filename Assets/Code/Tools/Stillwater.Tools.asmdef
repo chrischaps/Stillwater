@@ -10,7 +10,9 @@
         "Stillwater.Anomalies",
         "Stillwater.NPC",
         "Stillwater.Journal",
-        "Stillwater.UI"
+        "Stillwater.UI",
+        "Unity.2D.PixelPerfect",
+        "Unity.RenderPipelines.Universal.Runtime"
     ],
     "includePlatforms": [
         "Editor"
