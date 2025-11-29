@@ -1,5 +1,7 @@
 using System;
 using NUnit.Framework;
+using UnityEngine;
+using UnityEngine.TestTools;
 using Stillwater.Core;
 
 namespace Stillwater.Tests
@@ -198,6 +200,9 @@ namespace Stillwater.Tests
             EventBus.Subscribe<TestEvent>(e => handler1Calls++);
             EventBus.Subscribe<TestEvent>(e => throw new Exception("Test exception"));
             EventBus.Subscribe<TestEvent>(e => handler2Calls++);
+
+            // Expect the logged exception from Debug.LogException
+            LogAssert.Expect(LogType.Exception, "Exception: Test exception");
 
             // Should not throw, and other handlers should still be called
             Assert.DoesNotThrow(() => EventBus.Publish(new TestEvent()));

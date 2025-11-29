@@ -161,6 +161,19 @@ This project uses JIRA for task management and follows a structured git workflow
         - **If compile errors are found, fix them before proceeding**
         - Common causes: missing using directives, incorrect namespaces, missing assembly references
 
+    - **Run Unity Tests from CLI:**
+        - **IMPORTANT:** Run all unit tests before committing to verify no regressions
+        - Close Unity Editor first (batch mode requires exclusive project access)
+        ```bash
+        # Windows - Run all EditMode tests from CLI
+        "C:/Program Files/Unity/Hub/Editor/6000.2.14f1/Editor/Unity.exe" -batchmode -runTests -testPlatform EditMode -projectPath "C:/Users/chris/dev/Stillwater" -testResults "C:/Users/chris/dev/Stillwater/TestResults.xml" -logFile -
+
+        # Check test results (returns exit code 0 if all pass, non-zero if failures)
+        # View TestResults.xml for detailed results
+        ```
+        - **If any tests fail, fix them before proceeding**
+        - Test results are written to `TestResults.xml` in the project root
+
     - **Write unit tests** for new functionality when possible:
         - Create test classes in the appropriate `Tests/` assembly
         - Cover core logic, edge cases, and error conditions
