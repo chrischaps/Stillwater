@@ -30,6 +30,26 @@ namespace Stillwater.Framework
         private static readonly object _lock = new();
 
         /// <summary>
+        /// Enable verbose logging for service registration/unregistration.
+        /// </summary>
+        public static bool VerboseLogging { get; set; } = true;
+
+        private const string LogPrefix = "[ServiceLocator]";
+
+        private static void Log(string message)
+        {
+            if (VerboseLogging)
+            {
+                UnityEngine.Debug.Log($"{LogPrefix} {message}");
+            }
+        }
+
+        private static void LogWarning(string message)
+        {
+            UnityEngine.Debug.LogWarning($"{LogPrefix} {message}");
+        }
+
+        /// <summary>
         /// Register a service instance for type T.
         /// </summary>
         /// <typeparam name="T">The service type (typically an interface).</typeparam>
@@ -52,6 +72,7 @@ namespace Stillwater.Framework
                 }
 
                 _services[type] = service;
+                Log($"Registered {type.Name} -> {service.GetType().Name}");
             }
         }
 
@@ -70,7 +91,10 @@ namespace Stillwater.Framework
 
             lock (_lock)
             {
-                _services[typeof(T)] = service;
+                var type = typeof(T);
+                bool isReplacement = _services.ContainsKey(type);
+                _services[type] = service;
+                Log($"{(isReplacement ? "Replaced" : "Registered")} {type.Name} -> {service.GetType().Name}");
             }
         }
 
@@ -83,7 +107,13 @@ namespace Stillwater.Framework
         {
             lock (_lock)
             {
-                return _services.Remove(typeof(T));
+                var type = typeof(T);
+                if (_services.Remove(type))
+                {
+                    Log($"Unregistered {type.Name}");
+                    return true;
+                }
+                return false;
             }
         }
 
@@ -193,6 +223,7 @@ namespace Stillwater.Framework
                 }
 
                 _services[serviceType] = instance;
+                Log($"Registered {serviceType.Name} -> {instance.GetType().Name}");
             }
         }
 
@@ -282,8 +313,7 @@ namespace Stillwater.Framework
                 var constructor = type.GetConstructor(Type.EmptyTypes);
                 if (constructor == null)
                 {
-                    UnityEngine.Debug.LogWarning(
-                        $"[ServiceLocator] Cannot register {type.Name}: no parameterless constructor found.");
+                    LogWarning($"Cannot auto-register {type.Name}: no parameterless constructor (is it a MonoBehaviour?)");
                     continue;
                 }
 
@@ -294,27 +324,21 @@ namespace Stillwater.Framework
                     // Validate that the class actually implements the interface
                     if (!serviceType.IsAssignableFrom(type))
                     {
-                        UnityEngine.Debug.LogWarning(
-                            $"[ServiceLocator] Cannot register {type.Name} as {serviceType.Name}: " +
-                            $"class does not implement the interface.");
+                        LogWarning($"Cannot register {type.Name} as {serviceType.Name}: class does not implement the interface.");
                         continue;
                     }
 
                     // Validate that the interface has [Service] attribute
                     if (serviceType.GetCustomAttribute<ServiceAttribute>() == null)
                     {
-                        UnityEngine.Debug.LogWarning(
-                            $"[ServiceLocator] Cannot register {type.Name} as {serviceType.Name}: " +
-                            $"interface does not have [Service] attribute.");
+                        LogWarning($"Cannot register {type.Name} as {serviceType.Name}: interface missing [Service] attribute.");
                         continue;
                     }
 
                     // Skip if already registered
                     if (IsRegistered(serviceType))
                     {
-                        UnityEngine.Debug.LogWarning(
-                            $"[ServiceLocator] Skipping {type.Name} as {serviceType.Name}: " +
-                            $"service already registered.");
+                        LogWarning($"Skipping {type.Name} as {serviceType.Name}: service already registered.");
                         continue;
                     }
 
