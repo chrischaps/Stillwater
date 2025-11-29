@@ -12,8 +12,17 @@ EditorBuildSettings:
     path: Assets/Scenes/Title/Title.unity
     guid: 9325208e6e9625b47b8ed09dcf24e378
   - enabled: 1
-    path: Assets/Scenes/Main/Main.unity
+    path: Assets/Scenes/Main/Main Base.unity
+    guid: 3c03e9da90a0d4a4c999623cb7f4a477
+  - enabled: 1
+    path: Assets/Scenes/Main/Main_Systems.unity
+    guid: ee3c012ff0a1da74ca5fc7cfa8604c28
+  - enabled: 1
+    path: Assets/Scenes/Main/Main_UI.unity
     guid: 17effb50313219f40bdd9cf74d92a251
+  - enabled: 1
+    path: Assets/Scenes/Test/Test_Fishing.unity
+    guid: 16d741f4ede4899459f6b550a1a06a8b
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
