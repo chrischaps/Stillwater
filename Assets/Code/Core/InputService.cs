@@ -9,9 +9,8 @@ namespace Stillwater.Core
     /// Reads from StillwaterInput actions and publishes events via EventBus.
     ///
     /// This MonoBehaviour should be placed in a scene that persists (e.g., Boot scene)
-    /// or on a DontDestroyOnLoad object.
+    /// or on a DontDestroyOnLoad object. It self-registers with ServiceLocator on Awake.
     /// </summary>
-    [ServiceDefault]
     public class InputService : MonoBehaviour, IInputService
     {
         [SerializeField] private InputActionAsset _inputActions;
@@ -39,15 +38,32 @@ namespace Stillwater.Core
             set => _inputEnabled = value;
         }
 
+        [Header("Debug")]
+        [SerializeField] private bool _logInput;
+
         private void Awake()
         {
+            // Self-register with ServiceLocator (MonoBehaviours can't use [ServiceDefault])
+            if (ServiceLocator.IsRegistered<IInputService>())
+            {
+                Debug.LogWarning("[InputService] IInputService already registered, destroying duplicate.");
+                Destroy(this);
+                return;
+            }
+            ServiceLocator.Register<IInputService>(this);
+
             if (_inputActions == null)
             {
                 Debug.LogError("[InputService] Input Actions asset not assigned!");
                 return;
             }
 
+            // Clone the input actions so we have an independent copy
+            // This prevents other components from interfering with our action states
+            _inputActions = Instantiate(_inputActions);
+
             InitializeActions();
+            Debug.Log("[InputService] Initialized successfully (using cloned InputActions)");
         }
 
         private void InitializeActions()
@@ -148,30 +164,60 @@ namespace Stillwater.Core
 
         private void OnDisable()
         {
-            _gameplayMap?.Disable();
-            _uiMap?.Disable();
+            // Intentionally empty - don't disable maps during scene transitions
+            // This service persists across scenes via DontDestroyOnLoad
         }
 
         private void OnDestroy()
         {
+            // Disable maps on actual destruction
+            _gameplayMap?.Disable();
+            _uiMap?.Disable();
+
             UnbindCallbacks();
+
+            // Unregister from ServiceLocator
+            if (ServiceLocator.TryGet<IInputService>(out var registered) && registered == this)
+            {
+                ServiceLocator.Unregister<IInputService>();
+            }
         }
 
         public void EnableGameplayInput()
         {
             _uiMap?.Disable();
             _gameplayMap?.Enable();
+            Debug.Log("[InputService] Switched to Gameplay input map");
         }
 
         public void EnableUIInput()
         {
             _gameplayMap?.Disable();
             _uiMap?.Enable();
+            Debug.Log("[InputService] Switched to UI input map");
+        }
+
+        private void Update()
+        {
+            // Poll input directly (more reliable than callbacks for continuous input)
+            if (_moveAction != null)
+            {
+                _moveInput = _moveAction.ReadValue<Vector2>();
+            }
+
+            if (_logInput && _moveInput.sqrMagnitude > 0.01f)
+            {
+                Debug.Log($"[InputService] Move: {_moveInput}");
+            }
         }
 
         private void OnMove(InputAction.CallbackContext context)
         {
             _moveInput = context.ReadValue<Vector2>();
+            if (_logInput && _moveInput.sqrMagnitude > 0.01f)
+            {
+                Debug.Log($"[InputService] Move input (callback): {_moveInput}");
+            }
         }
 
         private void OnCast(InputAction.CallbackContext context)

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 195766431094794884}
   - component: {fileID: 123390993742000839}
   - component: {fileID: 4680381583589294352}
+  - component: {fileID: -2456219009831010290}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -165,3 +166,21 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.17, y: 0.38}
   m_EdgeRadius: 0
+--- !u!114 &-2456219009831010290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3981483478829440612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f82b91c1296b9a4297212a6b58c8e8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Stillwater.Core::Stillwater.Core.PlayerController
+  _moveSpeed: 5
+  _acceleration: 10
+  _deceleration: 10
+  _useIsometricMovement: 1
+  _isometricYRatio: 0.5
+  _logMovement: 1

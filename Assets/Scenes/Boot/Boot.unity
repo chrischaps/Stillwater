@@ -184,6 +184,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Stillwater.Core::Stillwater.Core.InputService
   _inputActions: {fileID: -944628639613478452, guid: 823c4d529a6c9254f8d97d2a72a82a06, type: 3}
+  _logInput: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
