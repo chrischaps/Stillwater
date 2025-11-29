@@ -1,0 +1,49 @@
+.root {
+    flex-grow: 1;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(20, 30, 40);
+}
+
+.menu-container {
+    align-items: center;
+    padding: 40px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+}
+
+.title {
+    font-size: 48px;
+    color: rgb(200, 220, 240);
+    margin-bottom: 40px;
+    -unity-font-style: bold;
+    letter-spacing: 4px;
+}
+
+.button-container {
+    align-items: stretch;
+    width: 200px;
+}
+
+.menu-button {
+    height: 48px;
+    margin: 8px 0;
+    font-size: 18px;
+    color: rgb(220, 230, 240);
+    background-color: rgb(40, 60, 80);
+    border-width: 2px;
+    border-color: rgb(60, 90, 120);
+    border-radius: 4px;
+    transition-duration: 0.15s;
+}
+
+.menu-button:hover {
+    background-color: rgb(50, 80, 110);
+    border-color: rgb(80, 120, 160);
+    scale: 1.02;
+}
+
+.menu-button:active {
+    background-color: rgb(30, 50, 70);
+    scale: 0.98;
+}
