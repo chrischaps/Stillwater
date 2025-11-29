@@ -2,7 +2,8 @@
     "name": "Stillwater.Core",
     "rootNamespace": "Stillwater.Core",
     "references": [
-        "Stillwater.Framework"
+        "Stillwater.Framework",
+        "Unity.InputSystem"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

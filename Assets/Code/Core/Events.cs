@@ -90,4 +90,34 @@ namespace Stillwater.Core
     /// Fired when the main game has started and all main scenes are loaded.
     /// </summary>
     public struct GameStartedEvent { }
+
+    /// <summary>
+    /// Fired when the Cast action is performed (button press).
+    /// </summary>
+    public struct CastInputEvent { }
+
+    /// <summary>
+    /// Fired when the Reel action starts (hold begins).
+    /// </summary>
+    public struct ReelStartedEvent { }
+
+    /// <summary>
+    /// Fired when the Reel action ends (hold released).
+    /// </summary>
+    public struct ReelEndedEvent { }
+
+    /// <summary>
+    /// Fired when the Slack action is performed.
+    /// </summary>
+    public struct SlackInputEvent { }
+
+    /// <summary>
+    /// Fired when the Interact action is performed.
+    /// </summary>
+    public struct InteractInputEvent { }
+
+    /// <summary>
+    /// Fired when the Cancel action is performed.
+    /// </summary>
+    public struct CancelInputEvent { }
 }
