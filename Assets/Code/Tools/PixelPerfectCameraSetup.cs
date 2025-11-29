@@ -6,7 +6,7 @@ namespace Stillwater.Tools
 {
     public static class PixelPerfectCameraSetup
     {
-        private const int AssetsPixelsPerUnit = 16;
+        private const int AssetsPixelsPerUnit = 32;
         private const int ReferenceResolutionX = 320;
         private const int ReferenceResolutionY = 180;
 
