@@ -62,4 +62,27 @@ namespace Stillwater.Core
         /// <summary>Current disruption mood score (0-1).</summary>
         public float Disruption;
     }
+
+    /// <summary>
+    /// Fired when GameRoot has completed initialization and all core services are ready.
+    /// </summary>
+    public struct GameInitializedEvent { }
+
+    /// <summary>
+    /// Fired when a scene begins loading.
+    /// </summary>
+    public struct SceneLoadStartedEvent
+    {
+        /// <summary>The name of the scene being loaded.</summary>
+        public string SceneName;
+    }
+
+    /// <summary>
+    /// Fired when a scene has finished loading.
+    /// </summary>
+    public struct SceneLoadCompletedEvent
+    {
+        /// <summary>The name of the scene that was loaded.</summary>
+        public string SceneName;
+    }
 }
