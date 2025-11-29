@@ -24,5 +24,5 @@ EditorBuildSettings:
     path: Assets/Scenes/Test/Test_Fishing.unity
     guid: 16d741f4ede4899459f6b550a1a06a8b
   m_configObjects:
-    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 823c4d529a6c9254f8d97d2a72a82a06, type: 3}
   m_UseUCBPForAssetBundles: 0
