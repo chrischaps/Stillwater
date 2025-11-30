@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 123390993742000839}
   - component: {fileID: 4680381583589294352}
   - component: {fileID: -2456219009831010290}
+  - component: {fileID: 8847562910384756123}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -158,7 +159,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.17, y: 0.38}
+    oldSize: {x: 0.265625, y: 0.59375}
     newSize: {x: 0.17, y: 0.38}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -178,9 +179,94 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f82b91c1296b9a4297212a6b58c8e8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Stillwater.Core::Stillwater.Core.PlayerController
-  _moveSpeed: 5
+  _moveSpeed: 1
   _acceleration: 10
   _deceleration: 10
-  _useIsometricMovement: 1
-  _isometricYRatio: 0.5
+  _movementMode: 1
+  _gridSize: 1
+  _trackSnapDistance: 0.1
+  _inputDeadzone: 0.2
   _logMovement: 1
+  _drawTrackGizmos: 1
+--- !u!114 &8847562910384756123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3981483478829440612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0273bccfbde25674ea6996a81b396131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Stillwater.Core::Stillwater.Core.PlayerAnimator
+  _frameRate: 10
+  _spriteNorth: {fileID: 4814271557941635497, guid: f6508ebcee9f8d747aa1a6ace3ec1878, type: 3}
+  _spriteNorthEast: {fileID: -206670225839568205, guid: 7a50ea3afc9a61f439200c58cd7148a6, type: 3}
+  _spriteEast: {fileID: -2097619832946416524, guid: 56ccc2f38b922bf469fab875a3052479, type: 3}
+  _spriteSouthEast: {fileID: -8959435104959665722, guid: 6d33917cdecd33741b09c9ed9d683ba5, type: 3}
+  _spriteSouth: {fileID: 2324236343598682440, guid: efb1d536695e74141bcab134cabb5207, type: 3}
+  _spriteSouthWest: {fileID: -1505471383403432660, guid: d714962e0a96eed46b0975667204cc7b, type: 3}
+  _spriteWest: {fileID: 3373983171478037719, guid: 9f708902a5aa1ec439600009aa93359c, type: 3}
+  _spriteNorthWest: {fileID: 539946027851580950, guid: 6e26db968dad5714594d812bbe2c450f, type: 3}
+  _idleNorthFrames:
+  - {fileID: 21300000, guid: a6363adbec2d06b4681238a9abb7fa7e, type: 3}
+  - {fileID: 21300000, guid: 5833622383e68614f9541b4fb7d0dce0, type: 3}
+  - {fileID: 21300000, guid: b286c259d02cb174ead83a96f54781dc, type: 3}
+  - {fileID: 21300000, guid: b0a7c7431b36b0b478c132164f261773, type: 3}
+  _idleNorthEastFrames:
+  - {fileID: 21300000, guid: c3c502c526321e14395846b985ba0ad7, type: 3}
+  - {fileID: 21300000, guid: 4c291c36064fd514d897317be2e8f33f, type: 3}
+  - {fileID: 21300000, guid: f2ef4170b9f34ff46ae7ff9e68af9b0d, type: 3}
+  - {fileID: 21300000, guid: a6b38fc3f2bcd1e4ba4ea53e43cd9af1, type: 3}
+  _idleEastFrames:
+  - {fileID: 21300000, guid: 9459aa1ead9bbb64f96a72c2361ec3d3, type: 3}
+  - {fileID: 21300000, guid: a698457bc680cbf4b9d549df610b3a93, type: 3}
+  - {fileID: 21300000, guid: a7214f7f5ca17c74183713f756d273e1, type: 3}
+  - {fileID: 21300000, guid: c9edcbaeb9052374cb9a7c81648191fd, type: 3}
+  _idleSouthEastFrames:
+  - {fileID: 21300000, guid: d1c6d0a89fb0818418432465ed93aa79, type: 3}
+  - {fileID: 21300000, guid: b8a5d0c984b492c47a98e539bfd14883, type: 3}
+  - {fileID: 21300000, guid: 34e0a9ab4a2027b4d866fc7b4216aa2a, type: 3}
+  - {fileID: 21300000, guid: 1285762c3bb6176479541d3cad2734b2, type: 3}
+  _idleSouthFrames:
+  - {fileID: -1808982527863717971, guid: 1594b86bf5ad77c43a66d0932db94a03, type: 3}
+  - {fileID: 8115644005664255767, guid: a2c18da888efc5a46a442e7cae6ad3f7, type: 3}
+  - {fileID: -1974267942269126528, guid: 70c1baabf57cf7a4fb9ee61ffb846edf, type: 3}
+  - {fileID: 2536910936557558875, guid: 5c9b185e45095a24ea647d7b68933ba2, type: 3}
+  _walkNorthFrames:
+  - {fileID: 21300000, guid: c56d5554b7f01c14990d56c0894fb787, type: 3}
+  - {fileID: 21300000, guid: 8c9238c3c3a04034bb513d7b66354cc9, type: 3}
+  - {fileID: 21300000, guid: 60754256e39221e48aa0e2ee1c35daee, type: 3}
+  - {fileID: 21300000, guid: 2ecdc743dae54b44c9402de32df32314, type: 3}
+  - {fileID: 21300000, guid: 2c86ca4ac4205af46aa3c465d5a1f802, type: 3}
+  - {fileID: 21300000, guid: a116ee6d8c74d544aad16d3a8c3ed34d, type: 3}
+  _walkNorthEastFrames:
+  - {fileID: 21300000, guid: 177a14e536b696d45909731bd291f471, type: 3}
+  - {fileID: 21300000, guid: cc5cb615d545dff4491028b1fe21c846, type: 3}
+  - {fileID: 21300000, guid: 812cda94df4e8ac4b8e4220580aa567c, type: 3}
+  - {fileID: 21300000, guid: a167955c6dda8dd43bc99837f41c49e1, type: 3}
+  - {fileID: 21300000, guid: c232d1dc9c2ad2b40be3e86f6447359a, type: 3}
+  - {fileID: 21300000, guid: 9cdf509b343a59c43a80ad9df00d09bf, type: 3}
+  _walkEastFrames:
+  - {fileID: 21300000, guid: fe65d8e92bd6035499d7287c6c434ef6, type: 3}
+  - {fileID: 21300000, guid: ef4f264230bfa384899b0eb5e1777813, type: 3}
+  - {fileID: 21300000, guid: 3222ee2a844fd034487d6dbf3408c555, type: 3}
+  - {fileID: 21300000, guid: 573d8056cc92afc46b5610d762799fda, type: 3}
+  - {fileID: 21300000, guid: 08540a00f89fb5249a23546075c11e3d, type: 3}
+  - {fileID: 21300000, guid: 6945945271817f444aa2423563b6f8ee, type: 3}
+  _walkSouthEastFrames:
+  - {fileID: 21300000, guid: f158d0d669913564d9baea2d660293bb, type: 3}
+  - {fileID: 21300000, guid: 32fb7d1a85094b94b9c90210bb7b7e2e, type: 3}
+  - {fileID: 21300000, guid: 0f68164595ebfab479744fa8c85df071, type: 3}
+  - {fileID: 21300000, guid: 80d996807ce887647850db0f8ebbf04e, type: 3}
+  - {fileID: 21300000, guid: 3bc9918a80c81874baf8015338b39f30, type: 3}
+  - {fileID: 21300000, guid: e6e4c86c276af96409ad2306d0e2922e, type: 3}
+  _walkSouthFrames:
+  - {fileID: 21300000, guid: 9f1d25b60c2fd0341b2a221fc4040a2b, type: 3}
+  - {fileID: 21300000, guid: d8dfcddedb34a3a4f8d45a608a6c5b14, type: 3}
+  - {fileID: 21300000, guid: c5e34aeaf149826439dedbb78760d603, type: 3}
+  - {fileID: 21300000, guid: e46f884dc91d0a84f994b7a09651dda5, type: 3}
+  - {fileID: 21300000, guid: 03aa8d4dab4624a4e9fa17fe7b6fd57b, type: 3}
+  - {fileID: 21300000, guid: f8228207abb3c7f4ab85f262e20605b2, type: 3}
+  _playerController: {fileID: -2456219009831010290}

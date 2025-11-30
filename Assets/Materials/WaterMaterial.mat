@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: WaterMaterial
+  m_Shader: {fileID: 4800000, guid: 3bf554f945053844f9d9b586e1f27307, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _AlphaTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ShoreMaskTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _ColorShiftAmount: 0.065
+    - _ColorShiftSpeed: 1.73
+    - _DebugForceAllFoam: 0
+    - _DebugShoreMask: 0
+    - _EnableExternalAlpha: 0
+    - _FoamFromAlpha: 0
+    - _FoamIntensity: 0.561
+    - _FoamNoiseScale: 30
+    - _FoamPulseAmount: 0.337
+    - _FoamPulseSpeed: 0.5
+    - _FoamSharpness: 5.3
+    - _FoamSpeed: 0.38
+    - _FoamWaveSpeed: 1.11
+    - _FoamWidth: 0.166
+    - _SparkleDensity: 20
+    - _SparkleIntensity: 0.031
+    - _SparkleSpeed: 0.55
+    - _UseShoreDetection: 1
+    - _WaveAmplitude: 0.011
+    - _WaveFrequency: 7.7
+    - _WaveSpeed: 0.84
+    - _ZWrite: 0
+    m_Colors:
+    - _Color: {r: 0.68238986, g: 0.7805832, b: 1, a: 1}
+    - _FoamColor: {r: 0.5251572, g: 0.84147376, b: 1, a: 1}
+    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShoreMaskBoundsMin: {r: -2, g: -0.75, b: -2, a: 0}
+    - _ShoreMaskBoundsSize: {r: 6, g: 4.25, b: 4, a: 0}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
