@@ -3,7 +3,8 @@
     "rootNamespace": "Stillwater.Tests",
     "references": [
         "Stillwater.Framework",
-        "Stillwater.Core"
+        "Stillwater.Core",
+        "Stillwater.Fishing"
     ],
     "includePlatforms": [
         "Editor"
