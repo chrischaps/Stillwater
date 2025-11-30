@@ -62,7 +62,7 @@ Material:
     - _SparkleDensity: 20
     - _SparkleIntensity: 0.031
     - _SparkleSpeed: 0.55
-    - _UseShoreDetection: 1
+    - _UseShoreDetection: 0
     - _WaveAmplitude: 0.011
     - _WaveFrequency: 7.7
     - _WaveSpeed: 0.84

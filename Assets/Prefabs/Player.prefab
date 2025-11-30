@@ -16,6 +16,8 @@ GameObject:
   - component: {fileID: 8847562910384756123}
   - component: {fileID: 363785280313377539}
   - component: {fileID: 5835536614414712482}
+  - component: {fileID: -2120057472716003549}
+  - component: {fileID: -100452559022324820}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -395,3 +397,37 @@ MonoBehaviour:
   _pitchMin: 0.9
   _pitchMax: 1.1
   _minTimeBetweenSteps: 0.1
+--- !u!114 &-2120057472716003549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3981483478829440612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5657edae07a6a01448a0e54dfebd60ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Stillwater.Fishing::Stillwater.Fishing.FishingController
+  _debugLogging: 1
+  _lureTransform: {fileID: 0}
+  _lureController: {fileID: -100452559022324820}
+  _currentZoneId: starting_lake
+  _biteProbabilityModifier: 1
+--- !u!114 &-100452559022324820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3981483478829440612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00fb9ede598730e4c94f26b4157f1e54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Stillwater.Fishing::Stillwater.Fishing.LureController
+  _lurePrefab: {fileID: 0}
+  _driftDrag: 2
+  _minVelocity: 0.01
+  _initialDriftSpeed: 3
+  _debugLogging: 1
