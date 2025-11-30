@@ -17,27 +17,35 @@ Stillwater is a contemplative isometric fishing game built in Unity 6.2 with 2D 
 
 ### Namespace Convention
 Root namespace `Stillwater` with sub-namespaces:
-- `Stillwater.Core` - Event bus, save system, shared utilities
+- `Stillwater.Core` - Event bus, game initialization, input service, player controller
 - `Stillwater.Framework` - Service locator/DI infrastructure
-- `Stillwater.Fishing` - Fishing FSM, lure controller, state configs
-- `Stillwater.World` - Lake Watcher (mood manager), zone configs
-- `Stillwater.Echo` - Async multiplayer client, EchoPacket/EchoCurrent handling
-- `Stillwater.Anomalies` - Anomaly manager and definitions
-- `Stillwater.NPC` - NPC controllers and dialogue
-- `Stillwater.Journal` - Journal system, flavor text
+- `Stillwater.Fishing` - Fishing FSM, lure controller, fish definitions
+- `Stillwater.World` - Depth sorting, grid configuration *(Lake Watcher planned)*
+- `Stillwater.Echo` - *(Planned)* Async multiplayer client, EchoPacket/EchoCurrent handling
+- `Stillwater.Anomalies` - *(Planned)* Anomaly manager and definitions
+- `Stillwater.NPC` - *(Planned)* NPC controllers and dialogue
+- `Stillwater.Journal` - *(Planned)* Journal system, flavor text
 - `Stillwater.UI` - HUD, menus, panels
 
 ### Core Systems
-1. **Fishing FSM** - ScriptableObject-driven state machine (Casting → Drift → Stillness → BiteCheck → Hook → Reel → Caught/Lost)
-2. **Lake Watcher** - Tracks player behavior, maintains mood scores (stillness, curiosity, loss, disruption), drives anomaly probability
-3. **Echo System** - Async multiplayer that uploads behavior summaries and receives global influence (fish rarity, weather seeds, anomaly intensity)
-4. **Anomaly Manager** - Triggers surreal events based on mood thresholds and echo state
+
+**Implemented:**
+1. **Fishing FSM** - Class-based state machine with 12 states implementing `IFishingState` interface:
+   - States: Idle → Casting → LureDrift → Stillness → MicroTwitch → BiteCheck → HookOpportunity → Hooked → Reeling → SlackEvent → Caught → Lost
+   - `FishingController` (MonoBehaviour) implements `IFishingContext` to provide state access to lure, input, timing, and fish data
+   - `LureController` handles lure spawning, positioning, and drift physics
+   - `FishDefinition` (ScriptableObject) defines fish with bite curves, rarity, wait times
+
+**Planned:**
+2. **Lake Watcher** - *(Not yet implemented)* Will track player behavior, maintain mood scores (stillness, curiosity, loss, disruption), drive anomaly probability
+3. **Echo System** - *(Not yet implemented)* Will upload behavior summaries and receive global influence (fish rarity, weather seeds, anomaly intensity)
+4. **Anomaly Manager** - *(Not yet implemented)* Will trigger surreal events based on mood thresholds and echo state
 
 ### Design Patterns
-- **Event-Driven:** Use in-process event bus (`OnFishCaught`, `OnAnomalyTriggered`, `OnEchoUpdated`, etc.)
+- **Event-Driven:** Use in-process `EventBus` with typed events (`FishingStateChangedEvent`, `FishCaughtEvent`, `FishLostEvent`, `CastInputEvent`, `ReelStartedEvent`, `ReelEndedEvent`, `SlackInputEvent`, etc.)
 - **Data-Driven:** Fish, anomalies, zones, journal entries defined as ScriptableObjects
-- **Service Locator:** `GameRoot` initializes and wires dependencies; avoid scattering singletons
-- **Additive Scene Loading:** Separate scenes for base world, systems, and UI
+- **Service Locator:** `GameRoot` initializes and wires dependencies via `ServiceLocator`; avoid scattering singletons
+- **Additive Scene Loading:** Separate scenes for base world (Main Base), systems (Main_Systems), and UI (Main_UI)
 
 ## Folder Structure (when Unity project exists)
 
@@ -53,11 +61,48 @@ Assets/
 
 ## Key Data Structures
 
-- `FishDefinition` - Fish type with bite window curve, rarity, flavor text ID
+**Implemented:**
+- `FishDefinition` (ScriptableObject) - Fish type with bite window curve, rarity, min/max wait times, flavor text ID
+- `IFishingState` - Interface for fishing states: `Enter()`, `Update()`, `Exit()`, `GetNextState()`
+- `IFishingContext` - Interface providing states access to: current state, lure data (position, velocity, line tension), input flags, fish data (interest, hooked, selected fish), zone data, random values
+- `FishingState` (enum) - All 12 fishing states
+
+**Planned:**
 - `EchoPacket` - Player behavior summary sent to cloud (stillness avg, ritual patterns, zone distribution)
 - `EchoCurrent` - Global state received from cloud (fish rarity modifiers, weather seed, anomaly intensity)
 - `LakeWatcherState` - Local mood scores (stillness, curiosity, loss, disruption)
 - `JournalEntry` - Text with base + echo variant + mood frame
+
+## Implementation Status
+
+### Completed (Phase 1 Foundation)
+- [x] Unity 6.2 project with 2D URP
+- [x] Folder structure and assembly definitions
+- [x] Core framework (ServiceLocator, EventBus, GameRoot)
+- [x] Input service with Unity Input System
+- [x] Player controller with isometric movement
+- [x] Complete Fishing FSM (all 12 states)
+- [x] FishDefinition ScriptableObject + 3 fish assets (Catfish, GhostCarp, Sunfish)
+- [x] LureController with basic spawning/drift
+- [x] 16 unit test files covering core systems
+
+### In Progress (Fishing Vertical Slice Polish)
+- [ ] Fishing spot detection and interaction flow
+- [ ] Player fishing animations
+- [ ] Fishing line rendering
+- [ ] Bobber/lure water physics and states
+- [ ] Visual effects (ripples, splashes, bite indicator)
+- [ ] Fishing HUD (tension meter, hook timing)
+- [ ] Fishing sound effects
+
+### Planned (Future Phases)
+- [ ] Lake Watcher mood system
+- [ ] Echo System (async multiplayer simulation)
+- [ ] Anomaly System
+- [ ] Journal System
+- [ ] NPC System
+- [ ] Save System
+- [ ] Additional zones and content
 
 ## Tilemap Layers
 

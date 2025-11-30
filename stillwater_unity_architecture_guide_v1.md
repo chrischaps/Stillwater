@@ -427,20 +427,23 @@ Use custom inspectors and editor windows where helpful.
 
 When creating or onboarding the Unity project:
 
-1. Create Unity 6.2 2D URP project.  
-2. Set up:
-   - URP 2D Renderer  
-   - Pixel Perfect Camera  
-   - Sorting layers & tilemap layers  
-3. Create folder structure as defined above.  
-4. Create assembly definitions and namespaces.  
-5. Implement:
-   - `GameRoot`  
-   - Event bus  
-   - Basic `FishingController` + state machine skeleton  
-6. Implement `LakeWatcher` and hook it to a debug UI.  
-7. Prototype a single zone (`Starting Lake`) with placeholder art.  
-8. Hook in minimal Echo simulation (local only).  
+1. [x] Create Unity 6.2 2D URP project.
+2. [x] Set up:
+   - [x] URP 2D Renderer
+   - [x] Pixel Perfect Camera
+   - [x] Sorting layers & tilemap layers
+3. [x] Create folder structure as defined above.
+4. [x] Create assembly definitions and namespaces.
+5. [x] Implement:
+   - [x] `GameRoot`
+   - [x] Event bus
+   - [x] `FishingController` + complete state machine (all 12 states)
+6. [ ] Implement `LakeWatcher` and hook it to a debug UI.
+7. [ ] Prototype a single zone (`Starting Lake`) with placeholder art.
+8. [ ] Hook in minimal Echo simulation (local only).
+
+> **Current Status:** Steps 1-5 complete. The Fishing FSM is fully implemented with all 12 states.
+> Next priority is the Fishing Vertical Slice (see `fishing_vertical_slice_plan.md`) before returning to steps 6-8.
 
 Once these are in place, the project is architecturally ready to follow the GDD, TDD, and Production Roadmap.
 

@@ -101,17 +101,25 @@ Tilemap_FX
 # 4. Fishing Technical Specification
 
 ## 4.1 Fishing State Machine (Core)
-Implemented via ScriptableObjects representing:
+Implemented via C# classes implementing the `IFishingState` interface:
+- IdleState
 - CastingState
-- DriftState
+- LureDriftState
 - StillnessState
 - MicroTwitchState
 - BiteCheckState
 - HookOpportunityState
+- HookedState
 - ReelingState
 - SlackEventState
 - CaughtState
 - LostState
+
+### Key Interfaces
+- `IFishingState` - State interface with `Enter()`, `Update()`, `Exit()`, `GetNextState()`
+- `IFishingContext` - Provides states access to lure data, input flags, fish data, zone data, and random values
+- `FishingStateMachine` - Non-MonoBehaviour class managing state registration and transitions
+- `FishingController` - MonoBehaviour implementing `IFishingContext`, owns the state machine
 
 ## 4.2 Lure Physics (Lightweight)
 - Lure is a GameObject with:
@@ -147,6 +155,8 @@ abs(reelInputChange) < slackThreshold
 ---
 
 # 5. The Lake Watcher (World Mood Manager)
+
+> **Implementation Status:** *Not yet implemented. This section describes planned functionality.*
 
 ## 5.1 Purpose
 - Track player behaviors  
@@ -185,6 +195,8 @@ Scores feed into:
 ---
 
 # 6. Echo System (Async Multiplayer)
+
+> **Implementation Status:** *Not yet implemented. This section describes planned functionality.*
 
 ## 6.1 Data Flow
 1. Local client summarizes player behavior every N minutes  
@@ -227,6 +239,8 @@ Scores feed into:
 ---
 
 # 7. Anomaly System
+
+> **Implementation Status:** *Not yet implemented. This section describes planned functionality.*
 
 ## 7.1 Trigger Conditions
 - LakeWatcher mood thresholds  

@@ -7,7 +7,7 @@
 # 0. Document Information
 **Project:** Stillwater  
 **Draft:** Pre‑Production GDD v1.0  
-**Engine:** Unity (2022+ LTS, 2D Isometric)  
+**Engine:** Unity 6.2, 2D URP  
 **Multiplayer:** Asynchronous Strand System  
 **Primary Sources:** Vision Document, GDD Draft 0.2 & 0.3
 
