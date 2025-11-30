@@ -66,6 +66,16 @@ namespace Stillwater.Fishing
         }
 
         /// <summary>
+        /// Gets the state implementation for a given state type.
+        /// </summary>
+        /// <param name="stateType">The state to retrieve.</param>
+        /// <returns>The state implementation, or null if not registered.</returns>
+        public IFishingState GetState(FishingState stateType)
+        {
+            return _states.TryGetValue(stateType, out var state) ? state : null;
+        }
+
+        /// <summary>
         /// Initializes the state machine with a starting state.
         /// Must be called before Update().
         /// </summary>

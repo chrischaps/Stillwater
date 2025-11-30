@@ -18,8 +18,7 @@ namespace Stillwater.Fishing
 
         [Header("References")]
         [SerializeField] private Transform _lureTransform;
-        // Note: LureController reference will be added when that component is implemented
-        // [SerializeField] private LureController _lureController;
+        [SerializeField] private LureController _lureController;
 
         [Header("Zone Settings")]
         [SerializeField] private string _currentZoneId = "starting_lake";
@@ -99,6 +98,15 @@ namespace Stillwater.Fishing
         {
             get => _debugLogging;
             set => _debugLogging = value;
+        }
+
+        /// <summary>
+        /// The LureController managing the active lure.
+        /// </summary>
+        public LureController LureController
+        {
+            get => _lureController;
+            set => _lureController = value;
         }
 
         #endregion
@@ -250,25 +258,37 @@ namespace Stillwater.Fishing
 
         private void UpdateLureData()
         {
-            if (_lureTransform != null)
+            // Prefer LureController if available
+            if (_lureController != null && _lureController.IsActive)
             {
-                Vector2 newPosition = _lureTransform.position;
-                _lureVelocity = (newPosition - _lurePosition) / Time.deltaTime;
-                _lurePosition = newPosition;
+                _lurePosition = _lureController.Position;
+                _lureVelocity = _lureController.Velocity;
+                _lineLength = Vector2.Distance(transform.position, _lurePosition);
 
-                // Calculate line length from player to lure
+                // Update lure transform reference for backward compatibility
+                if (_lureController.ActiveLure != null)
+                {
+                    _lureTransform = _lureController.ActiveLure.transform;
+                }
+            }
+            else if (_lureTransform != null)
+            {
+                // Fallback to direct transform reference
+                Vector2 newPosition = _lureTransform.position;
+                if (Time.deltaTime > 0)
+                {
+                    _lureVelocity = (newPosition - _lurePosition) / Time.deltaTime;
+                }
+                _lurePosition = newPosition;
                 _lineLength = Vector2.Distance(transform.position, _lurePosition);
             }
             else
             {
-                // Default to player position if no lure transform
+                // Default to player position if no lure
                 _lurePosition = transform.position;
                 _lureVelocity = Vector2.zero;
                 _lineLength = 0f;
             }
-
-            // LineTension would come from LureController/ReelingState
-            // For now, keep it at current value (modified by states)
         }
 
         /// <summary>
@@ -368,6 +388,58 @@ namespace Stillwater.Fishing
             {
                 string previous = string.IsNullOrEmpty(evt.PreviousState) ? "None" : evt.PreviousState;
                 Debug.Log($"[FishingController] State: {previous} -> {evt.NewState}");
+            }
+
+            // Handle lure spawn/despawn based on state transitions
+            HandleLureStateTransition(evt.PreviousState, evt.NewState);
+        }
+
+        private void HandleLureStateTransition(string previousState, string newState)
+        {
+            if (_lureController == null)
+            {
+                return;
+            }
+
+            // Spawn lure when entering LureDrift from Casting
+            if (newState == "LureDrift" && previousState == "Casting")
+            {
+                SpawnLureAtCastPosition();
+            }
+        }
+
+        private void SpawnLureAtCastPosition()
+        {
+            if (_lureController == null || _stateMachine == null)
+            {
+                return;
+            }
+
+            // Get the CastingState to retrieve the calculated landing position
+            var castingState = _stateMachine.GetState(FishingState.Casting) as CastingState;
+            if (castingState != null)
+            {
+                Vector2 landingPosition = castingState.LandingPosition;
+                Vector2 playerPosition = transform.position;
+                Vector2 castDirection = (landingPosition - playerPosition).normalized;
+
+                _lureController.SpawnLure(landingPosition, castDirection);
+
+                if (_debugLogging)
+                {
+                    Debug.Log($"[FishingController] Spawned lure at {landingPosition}");
+                }
+            }
+            else
+            {
+                // Fallback: spawn at a default position in front of player
+                Vector2 fallbackPosition = (Vector2)transform.position + Vector2.up * 3f;
+                _lureController.SpawnLure(fallbackPosition);
+
+                if (_debugLogging)
+                {
+                    Debug.LogWarning("[FishingController] CastingState not found, using fallback lure position");
+                }
             }
         }
 
