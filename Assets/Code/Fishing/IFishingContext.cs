@@ -59,6 +59,17 @@ namespace Stillwater.Fishing
         /// <summary>Current struggle intensity of the hooked fish (0-1).</summary>
         float FishStruggleIntensity { get; }
 
+        /// <summary>
+        /// The currently selected fish definition (set during bite check).
+        /// May be null if no fish has been selected.
+        /// </summary>
+        FishDefinition SelectedFish { get; }
+
+        /// <summary>
+        /// Available fish definitions for the current zone.
+        /// </summary>
+        FishDefinition[] AvailableFish { get; }
+
         // ==================== Zone/Environment ====================
 
         /// <summary>Identifier of the current fishing zone.</summary>

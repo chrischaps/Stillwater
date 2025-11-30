@@ -24,6 +24,9 @@ namespace Stillwater.Fishing
         [SerializeField] private string _currentZoneId = "starting_lake";
         [SerializeField] private float _biteProbabilityModifier = 1f;
 
+        [Header("Fish Selection")]
+        [SerializeField] private FishDefinition[] _availableFish;
+
         // State machine
         private FishingStateMachine _stateMachine;
         private float _timeInState;
@@ -40,11 +43,12 @@ namespace Stillwater.Fishing
         private float _lineLength;
         private float _lineTension;
 
-        // Fish data (stub values until fish system exists)
+        // Fish data
         private bool _hasFishInterest;
         private bool _hasHookedFish;
         private string _hookedFishId;
         private float _fishStruggleIntensity;
+        private FishDefinition _selectedFish;
 
         // Random number generator
         private System.Random _random;
@@ -68,6 +72,8 @@ namespace Stillwater.Fishing
         public bool HasHookedFish => _hasHookedFish;
         public string HookedFishId => _hookedFishId;
         public float FishStruggleIntensity => _fishStruggleIntensity;
+        public FishDefinition SelectedFish => _selectedFish;
+        public FishDefinition[] AvailableFish => _availableFish;
 
         public string CurrentZoneId => _currentZoneId;
         public float BiteProbabilityModifier => _biteProbabilityModifier;
@@ -358,6 +364,98 @@ namespace Stillwater.Fishing
         public void ClearHookedFish()
         {
             SetHookedFish(null);
+            _selectedFish = null;
+        }
+
+        /// <summary>
+        /// Selects a random fish from available definitions weighted by rarity.
+        /// Higher rarity values mean more likely to be selected.
+        /// </summary>
+        /// <returns>The selected fish definition, or null if none available.</returns>
+        public FishDefinition SelectRandomFish()
+        {
+            if (_availableFish == null || _availableFish.Length == 0)
+            {
+                _selectedFish = null;
+                return null;
+            }
+
+            // Calculate total weight (rarity values)
+            float totalWeight = 0f;
+            foreach (var fish in _availableFish)
+            {
+                if (fish != null)
+                {
+                    totalWeight += fish.RarityBase;
+                }
+            }
+
+            if (totalWeight <= 0f)
+            {
+                // Fallback to first valid fish if no weights
+                foreach (var fish in _availableFish)
+                {
+                    if (fish != null)
+                    {
+                        _selectedFish = fish;
+                        return _selectedFish;
+                    }
+                }
+                return null;
+            }
+
+            // Roll for fish selection
+            float roll = GetRandomValue() * totalWeight;
+            float cumulative = 0f;
+
+            foreach (var fish in _availableFish)
+            {
+                if (fish != null)
+                {
+                    cumulative += fish.RarityBase;
+                    if (roll <= cumulative)
+                    {
+                        _selectedFish = fish;
+
+                        if (_debugLogging)
+                        {
+                            Debug.Log($"[FishingController] Selected fish: {fish.DisplayName} (rarity: {fish.RarityBase})");
+                        }
+
+                        return _selectedFish;
+                    }
+                }
+            }
+
+            // Fallback to last valid fish
+            for (int i = _availableFish.Length - 1; i >= 0; i--)
+            {
+                if (_availableFish[i] != null)
+                {
+                    _selectedFish = _availableFish[i];
+                    return _selectedFish;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Sets the available fish definitions for selection.
+        /// </summary>
+        /// <param name="fish">Array of fish definitions.</param>
+        public void SetAvailableFish(FishDefinition[] fish)
+        {
+            _availableFish = fish;
+        }
+
+        /// <summary>
+        /// Sets the selected fish directly (for testing or external selection).
+        /// </summary>
+        /// <param name="fish">The fish to select.</param>
+        public void SetSelectedFish(FishDefinition fish)
+        {
+            _selectedFish = fish;
         }
 
         #endregion
@@ -392,6 +490,44 @@ namespace Stillwater.Fishing
 
             // Handle lure spawn/despawn based on state transitions
             HandleLureStateTransition(evt.PreviousState, evt.NewState);
+
+            // Handle fish selection on bite
+            if (evt.NewState == "HookOpportunity")
+            {
+                SelectRandomFish();
+            }
+
+            // Publish FishCaughtEvent when entering Caught state
+            if (evt.NewState == "Caught")
+            {
+                PublishFishCaughtEvent();
+            }
+
+            // Clear fish data when returning to Idle
+            if (evt.NewState == "Idle" && evt.PreviousState != "Idle")
+            {
+                ClearHookedFish();
+            }
+        }
+
+        private void PublishFishCaughtEvent()
+        {
+            var fishEvent = new FishCaughtEvent
+            {
+                FishId = _selectedFish?.Id ?? _hookedFishId ?? "unknown",
+                ZoneId = _currentZoneId,
+                Size = GetRandomRange(0.5f, 1.5f), // Random size for now
+                IsRare = _selectedFish != null && _selectedFish.RarityBase < 0.3f,
+                FishDefinition = _selectedFish
+            };
+
+            EventBus.Publish(fishEvent);
+
+            if (_debugLogging)
+            {
+                string fishName = _selectedFish?.DisplayName ?? fishEvent.FishId;
+                Debug.Log($"[FishingController] Fish caught: {fishName} (size: {fishEvent.Size:F2}, rare: {fishEvent.IsRare})");
+            }
         }
 
         private void HandleLureStateTransition(string previousState, string newState)
