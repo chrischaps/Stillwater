@@ -28,6 +28,12 @@ namespace Stillwater.Core
 
         /// <summary>Whether this was a rare catch.</summary>
         public bool IsRare;
+
+        /// <summary>
+        /// Reference to the FishDefinition of the caught fish.
+        /// May be null if no definition was available.
+        /// </summary>
+        public object FishDefinition;
     }
 
     /// <summary>
