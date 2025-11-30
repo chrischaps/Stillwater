@@ -51,6 +51,9 @@ namespace Stillwater.Core
         private int _currentFrame;
 
         public FacingDirection CurrentDirection => _currentDirection;
+        public bool IsMoving => _isMoving;
+        public int CurrentFrame => _currentFrame;
+        public float FrameRate => _frameRate;
 
         private void Awake()
         {

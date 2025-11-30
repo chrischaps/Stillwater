@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7039567476530682457}
   - component: {fileID: 406151147815657579}
   - component: {fileID: 5187407271125931545}
+  - component: {fileID: 6832006235087198754}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -45,7 +46,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -162,3 +163,29 @@ MonoBehaviour:
   m_CropFrameX: 0
   m_CropFrameY: 0
   m_StretchFill: 0
+--- !u!114 &6832006235087198754
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6798796123819207150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd6d3f7abc9d32c42b5606679c0cfb9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Stillwater.Core::Stillwater.Core.CameraFollow
+  _target: {fileID: 0}
+  _findPlayerOnStart: 1
+  _playerTag: Player
+  _offset: {x: 0, y: 0, z: -10}
+  _smoothSpeed: 0.125
+  _useUnscaledTime: 0
+  _useLookAhead: 0
+  _lookAheadDistance: 1
+  _lookAheadSmoothing: 0.5
+  _useBounds: 0
+  _boundsMin: {x: -10, y: -10}
+  _boundsMax: {x: 10, y: 10}
+  _useDeadZone: 0
+  _deadZoneSize: {x: 1, y: 1}
