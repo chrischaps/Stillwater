@@ -24,6 +24,8 @@ namespace Stillwater.Tests
             public bool HasHookedFish { get; set; }
             public string HookedFishId { get; set; }
             public float FishStruggleIntensity { get; set; }
+            public FishDefinition SelectedFish { get; set; }
+            public FishDefinition[] AvailableFish { get; set; }
             public string CurrentZoneId { get; set; }
             public float BiteProbabilityModifier { get; set; }
             public float GetRandomValue() => 0.5f;
@@ -143,6 +145,8 @@ namespace Stillwater.Tests
             public bool HasHookedFish { get; set; }
             public string HookedFishId { get; set; }
             public float FishStruggleIntensity { get; set; }
+            public FishDefinition SelectedFish { get; set; }
+            public FishDefinition[] AvailableFish { get; set; }
             public string CurrentZoneId { get; set; }
             public float BiteProbabilityModifier { get; set; }
             public float GetRandomValue() => 0.5f;
@@ -273,6 +277,8 @@ namespace Stillwater.Tests
             public bool HasHookedFish { get; set; }
             public string HookedFishId { get; set; }
             public float FishStruggleIntensity { get; set; }
+            public FishDefinition SelectedFish { get; set; }
+            public FishDefinition[] AvailableFish { get; set; }
             public string CurrentZoneId { get; set; }
             public float BiteProbabilityModifier { get; set; }
             public float GetRandomValue() => 0.5f;
