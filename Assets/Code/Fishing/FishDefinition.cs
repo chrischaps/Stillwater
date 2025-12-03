@@ -134,10 +134,10 @@ namespace Stillwater.Fishing
 #if UNITY_EDITOR
         private void OnValidate()
         {
-            // Ensure min is not greater than max
+            // Warn if min is greater than max (let IsValid() catch this)
             if (_minWaitTime > _maxWaitTime)
             {
-                _maxWaitTime = _minWaitTime;
+                Debug.LogWarning($"[FishDefinition] {name}: MinWaitTime ({_minWaitTime}) > MaxWaitTime ({_maxWaitTime}). IsValid() will return false.");
             }
 
             // Auto-generate ID from name if empty
