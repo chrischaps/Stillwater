@@ -53,6 +53,9 @@ namespace Stillwater.Fishing
         // Random number generator
         private System.Random _random;
 
+        // Event subscription tracking
+        private bool _isSubscribed;
+
         #region IFishingContext Implementation
 
         public FishingState CurrentState => _stateMachine?.CurrentState ?? FishingState.Idle;
@@ -138,6 +141,9 @@ namespace Stillwater.Fishing
             }
 
             _random = new System.Random();
+            
+            // Subscribe to events (ensures tests work even if OnEnable isn't called)
+            SubscribeToEvents();
             InitializeStateMachine();
         }
 
@@ -152,17 +158,32 @@ namespace Stillwater.Fishing
                 }
             }
 
+            SubscribeToEvents();
+        }
+
+        /// <summary>
+        /// Subscribes to event bus events. Safe to call multiple times.
+        /// Called from both Initialize() and OnEnable() to ensure tests work.
+        /// </summary>
+        private void SubscribeToEvents()
+        {
+            if (_isSubscribed) return;
+            _isSubscribed = true;
+
             // Subscribe to input events
             EventBus.Subscribe<CastInputEvent>(OnCastInput);
             EventBus.Subscribe<SlackInputEvent>(OnSlackInput);
             EventBus.Subscribe<CancelInputEvent>(OnCancelInput);
 
-            // Subscribe to state change events for debug logging
+            // Subscribe to state change events
             EventBus.Subscribe<FishingStateChangedEvent>(OnFishingStateChanged);
         }
 
         private void OnDisable()
         {
+            // Reset subscription tracking so we can re-subscribe on enable
+            _isSubscribed = false;
+
             // Unsubscribe from events
             EventBus.Unsubscribe<CastInputEvent>(OnCastInput);
             EventBus.Unsubscribe<SlackInputEvent>(OnSlackInput);
