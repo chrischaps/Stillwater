@@ -2,6 +2,8 @@
 
 A Unity-based game project.
 
+**Project page:** [chaps.dev/projects/stillwater](https://chaps.dev/projects/stillwater/)
+
 ## Documentation
 
 - [Game Design Document](stillwater_gdd_prepro_v1.md)
